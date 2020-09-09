@@ -5,6 +5,7 @@ const { exec }  = require("child_process");
 const fs        = require('fs');
 const cheerio   = require('cheerio');
 const request   = require('request');
+const nihongo   = require('nihongo');
 const searchUrl = "https://eu.finalfantasyxiv.com/lodestone/playguide/db/item/?patch=&db_search_category=item&category2=&q={ITEM_NAME}";
 const itemUrl   = "https://eu.finalfantasyxiv.com";
 
@@ -12,7 +13,7 @@ const itemUrl   = "https://eu.finalfantasyxiv.com";
 // Arguments
 // ---------------------------------------
 
-let [start, size] = process.argv.slice(2);
+let [start, size, force] = process.argv.slice(2);
 start = parseInt(start);
 size = parseInt(size);
 let end = start + size;
@@ -84,9 +85,23 @@ const doshit = () => {
     // we always get 0 because we remove entries as we work through them
     let item     = item_data[0];
     let url      = searchUrl.replace('{ITEM_NAME}', item.name_en);
-    let filename = `img/${item.name_en} Icon.png`;
+    let filename = 'img/' + `${item.name_en} Icon.png`.replace(/\//g, "-");
 
     console.log(`- (${current}/${total}) ${item.name_en}`);
+
+    // skip already downloaded ones
+    if (!force && fs.existsSync(filename)) {
+        item_data.splice(0, 1);
+        doshit();
+        return;
+    }
+
+    if (nihongo.isJapanese(item.name_en)) {
+        console.error(`---> Error: Above entry is Japanese, skipping...`);
+        item_data.splice(0, 1);
+        doshit();
+        return;
+    }
 
     // get the item icon url
     getItemIconUrl(url, itemIconUrl => {
@@ -95,6 +110,13 @@ const doshit = () => {
             url: itemIconUrl,
             encoding: 'binary'
         }, function (err, response, body) {
+            if (!body) {
+                console.error(`---> Error: Failed to get image for the above item, icon will not be saved`);
+                item_data.splice(0, 1);
+                doshit();
+                return;
+            }
+
             fs.writeFile(filename, body, 'binary', (error) => {
                 if (error) {
                     console.error(err);

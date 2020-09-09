@@ -5,7 +5,8 @@
   "main": "app.js",
   "dependencies": {
     "cheerio": "^1.0.0-rc.3",
-    "jsdom": "^16.4.0"
+    "jsdom": "^16.4.0",
+    "nihongo": "^1.0.1"
   },
   "devDependencies": {},
   "scripts": {

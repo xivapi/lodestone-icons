@@ -16,12 +16,14 @@ This should setup everything.
 
 ## Using
 
-- `node app.js <start_index> <size>`
+- `node app.js <start_index> <size> <force>`
 - eg: `node app.js 0 100`
 
 > `start_index` - This is the index in the ItemData.json so 0 is the first, 30 would be the 31st entry (array index)
 
-> `size` - this is how many from the index, so a start of 0 and size of 5 would be: 0,1,2,3,4 entries in the ItemData.json downloaded
+> `size` - This is how many from the index, so a start of 0 and size of 5 would be: 0,1,2,3,4 entries in the ItemData.json downloaded
+
+> `force` - Optional, without this it will skip already downloaded icons. Just add "force" to end if you want to force downloading icons.
 
 You can just do something like: `node app.js 0 1000` and it would do all of them, however you could batch this up running multiple command line windows and each one do a segment, eg:
 
