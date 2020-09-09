@@ -5,7 +5,7 @@ Downloads icons from Lodestone by searching items to get those sweet HQ stuffs
 ## Requirements
 
 - PHP, this is used to just bypass cors restrictions
-- NodeJS 10+ (dev'd on v12)
+- NodeJS v12+
 
 ## Getting started
 
