@@ -51,11 +51,9 @@ const getItemIconUrl = (url, callback) => {
 // Make dir folder if it doesn't exist
 fs.mkdirSync('img/', { recursive: true });
 
-
 // grab ItemData.json file
 console.log("Reading ItemData.json file");
 var item_data = JSON.parse(fs.readFileSync('ItemData.json', 'utf8'));
-
 
 // remove entries we don't care about
 console.log(`Reducing the item list to: ${start} and ${end}`);
@@ -96,6 +94,7 @@ const doshit = () => {
         return;
     }
 
+    // check if the item name is Japanese
     if (nihongo.isJapanese(item.name_en)) {
         console.error(`---> Error: Above entry is Japanese, skipping...`);
         item_data.splice(0, 1);
