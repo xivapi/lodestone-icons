@@ -62,6 +62,7 @@ item_data = item_data.splice(start, (end - start));
 
 // set total
 const total = item_data.length;
+console.log(item_data);
 console.log(`${item_data.length} entries`);
 
 if (item_data.length <= 0) {
@@ -71,24 +72,21 @@ if (item_data.length <= 0) {
 
 // begin downloading icons
 let current = 0;
-let index = 0;
-
-console.log(item_data);
 
 const doshit = () => {
-    index = current;
     current++;
 
-    if (item_data.length < 0) {
+    if (item_data.length <= 0) {
         console.log("Finished all icons!!!");
         return;
     }
 
-    let item     = item_data[current - 1];
+    // we always get 0 because we remove entries as we work through them
+    let item     = item_data[0];
     let url      = searchUrl.replace('{ITEM_NAME}', item.name_en);
     let filename = `img/${item.name_en} Icon.png`;
 
-    console.log(`- (${current}/${total}) ${item.name_en} @ "${url}"`);
+    console.log(`- (${current}/${total}) ${item.name_en}`);
 
     // get the item icon url
     getItemIconUrl(url, itemIconUrl => {
@@ -100,10 +98,9 @@ const doshit = () => {
             fs.writeFile(filename, body, 'binary', (error) => {
                 if (error) {
                     console.error(err);
-                    return;
                 }
 
-                item_data.splice(index, 1);
+                item_data.splice(0, 1);
                 doshit();
             });
         });
